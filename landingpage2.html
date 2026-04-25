@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>AI Learning Hub – ULIS AI Platform</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* ── Smooth scroll ── */
+    html { scroll-behavior: smooth; }
+
+    /* ── Base font ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: #f6f7fb; color: #1a1c28; }
+    h1, h2, h3, h4, .font-display { font-family: 'Sora', sans-serif; }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-flex; align-items: center; line-height: 1;
+    }
+
+    /* ── Navbar active underline ── */
+    nav a.active {
+      color: #0055ff;
+      border-bottom: 2.5px solid #0055ff;
+      padding-bottom: 20px; margin-bottom: -20px;
+    }
+
+    /* ── Hero gradient ── */
+    .hero-gradient {
+      background: linear-gradient(135deg, #0a0f2e 0%, #0d1a5c 40%, #1a0a4e 70%, #2b0d5c 100%);
+    }
+    .hero-glow {
+      background: radial-gradient(ellipse 70% 60% at 55% 50%, rgba(80,120,255,0.22) 0%, transparent 80%),
+                  radial-gradient(ellipse 40% 40% at 20% 80%, rgba(160,80,255,0.16) 0%, transparent 70%);
+    }
+    .grid-lines {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    /* ── Floating badge ── */
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .float { animation: float 4s ease-in-out infinite; }
+    .float-delay { animation: float 4s ease-in-out infinite; animation-delay: 1.5s; }
+
+    /* ── Fade-in on scroll ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Stat counter ── */
+    @keyframes countUp {
+      from { opacity:0; transform:translateY(12px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .stat-item { animation: countUp .7s ease both; }
+
+    /* ── Card hover lift ── */
+    .card-lift { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,85,255,.10); }
+
+    /* ── Gradient text ── */
+    .text-gradient {
+      background: linear-gradient(90deg, #0055ff 0%, #7c3aed 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar { background: linear-gradient(90deg, #0055ff, #7c3aed); border-radius: 99px; height: 6px; }
+
+    /* ── Tag pill ── */
+    .tag { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:600;
+           padding:3px 10px; border-radius:99px; letter-spacing:.03em; text-transform:uppercase; }
+
+    /* ── Blog card image overlay ── */
+    .blog-img-wrap { overflow:hidden; border-radius: 10px 10px 0 0; }
+    .blog-img-wrap img { transition: transform .4s ease; width:100%; height:180px; object-fit:cover; }
+    .blog-img-wrap:hover img { transform: scale(1.05); }
+
+    /* ── Checkbox custom ── */
+    .check-box input[type="checkbox"] { display:none; }
+    .check-box input:checked ~ .box { background:#0055ff; border-color:#0055ff; }
+    .check-box input:checked ~ .box .check-icon { opacity:1; }
+    .check-icon { opacity:0; transition: opacity .2s; }
+
+    /* ── Mobile menu ── */
+    #mobile-menu { display:none; }
+    #mobile-menu.open { display:flex; }
+
+    /* ── Toast notification ── */
+    #toast {
+      position: fixed; bottom: 90px; right: 32px; z-index: 9999;
+      display: flex; align-items: center; gap: 10px;
+      background: #111827; color: #fff;
+      padding: 12px 18px; border-radius: 14px;
+      font-size: 14px; font-weight: 600; font-family: 'DM Sans', sans-serif;
+      box-shadow: 0 8px 32px rgba(0,0,0,.22);
+      transform: translateY(16px) scale(0.95);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    #toast.show {
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+    }
+    #toast .toast-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #22c55e; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    /* ── Copy btn on prompt card ── */
+    .copy-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: #6b7280;
+      padding: 5px 10px; border-radius: 8px; border: 1px solid #e2e5f0;
+      background: #f9fafb; cursor: pointer; transition: all .18s ease;
+    }
+    .copy-btn:hover { background: #eff6ff; border-color: #0055ff; color: #0055ff; }
+    .copy-btn.copied { background: #f0fdf4; border-color: #22c55e; color: #16a34a; }
+
+    /* ── Scroll top btn ── */
+    #scrollTopBtn {
+      position:fixed; bottom:32px; right:32px; z-index:999;
+      width:44px; height:44px; border-radius:50%; background:#0055ff; color:#fff;
+      display:flex; align-items:center; justify-content:center; cursor:pointer;
+      box-shadow: 0 4px 16px rgba(0,85,255,.35);
+      opacity:0; pointer-events:none; transition: opacity .3s ease;
+    }
+    #scrollTopBtn.show { opacity:1; pointer-events:all; }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary:    "#0055ff",
+            "primary-dark": "#003ecc",
+            secondary:  "#7c3aed",
+            surface:    "#f6f7fb",
+            "surface-card": "#ffffff",
+            muted:      "#6b7280",
+            border:     "#e2e5f0",
+          },
+          fontFamily: {
+            sans:    ["DM Sans", "sans-serif"],
+            display: ["Sora",    "sans-serif"],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-surface min-h-screen flex flex-col">
+
+<!-- ═══════════════════════ TOP NAV ═══════════════════════ -->
+<header id="navbar" class="bg-white/95 backdrop-blur-md sticky top-0 z-50 border-b border-border shadow-sm transition-all duration-300">
+  <div class="flex items-center justify-between px-6 lg:px-10 h-16 max-w-[1440px] mx-auto">
+
+    <!-- Logo -->
+    <a href="#hero" class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+        <span class="material-symbols-outlined text-white text-[18px]" style="font-variation-settings:'FILL' 1">science</span>
+      </div>
+      <span class="font-display font-bold text-[17px] tracking-tight text-gray-900">AI<span class="text-primary"> Learning Hub</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
+      <a href="#prompt-library"   class="nav-link px-3 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-blue-50 transition-all duration-200">Prompt Library</a>
+      <a href="#learning-hub"     class="nav-link px-3 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-blue-50 transition-all duration-200">Learning Hub</a>
+      <a href="#ai-responsibility" class="nav-link px-3 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-blue-50 transition-all duration-200">AI Responsibility</a>
+      <a href="#community-forum"  class="nav-link px-3 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-blue-50 transition-all duration-200">Community Forum</a>
+      <a href="#blog-newsroom"    class="nav-link px-3 py-2 rounded-lg text-gray-600 hover:text-primary hover:bg-blue-50 transition-all duration-200">Blog</a>
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
+      <div class="hidden lg:flex items-center bg-gray-50 rounded-full px-4 py-2 border border-border focus-within:border-primary transition-colors">
+        <span class="material-symbols-outlined text-gray-400 text-[18px] mr-2">search</span>
+        <input class="bg-transparent border-none outline-none text-sm w-40 text-gray-700" placeholder="Search…" type="text"/>
+      </div>
+      <button aria-label="Notifications" class="p-2 rounded-full text-gray-500 hover:bg-gray-50 transition-colors">
+        <span class="material-symbols-outlined">notifications</span>
+      </button>
+      <button aria-label="Settings" class="p-2 rounded-full text-gray-500 hover:bg-gray-50 transition-colors">
+        <span class="material-symbols-outlined">settings</span>
+      </button>
+      <button class="ml-1 bg-primary text-white font-semibold text-sm px-5 py-2 rounded-xl hover:bg-primary-dark shadow-sm transition-colors">
+        Sign In
+      </button>
+      <!-- Mobile hamburger -->
+      <button id="hamburger" class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-50 transition-colors ml-1">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="flex-col gap-1 px-6 pb-4 md:hidden border-t border-border bg-white">
+    <a href="#prompt-library"    class="block py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Prompt Library</a>
+    <a href="#learning-hub"      class="block py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Learning Hub</a>
+    <a href="#ai-responsibility" class="block py-2.5 text-sm font-medium text-gray-700 hover:text-primary">AI Responsibility</a>
+    <a href="#community-forum"   class="block py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Community Forum</a>
+    <a href="#blog-newsroom"     class="block py-2.5 text-sm font-medium text-gray-700 hover:text-primary">Blog</a>
+  </div>
+</header>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="hero" class="hero-gradient relative overflow-hidden min-h-[88vh] flex items-center">
+  <div class="grid-lines absolute inset-0 opacity-100"></div>
+  <div class="hero-glow absolute inset-0"></div>
+
+  <div class="relative z-10 max-w-[1280px] mx-auto px-6 lg:px-10 py-24 flex flex-col lg:flex-row items-center gap-16">
+    <!-- Text -->
+    <div class="flex-1 text-center lg:text-left">
+      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs font-semibold text-blue-200 mb-8 tracking-wider uppercase">
+        <span class="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+        Now live — AI Learning Hub v2.0
+      </div>
+      <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.13] tracking-tight mb-6">
+        AI-Powered Tools<br/>
+        <span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+          for Modern Science
+        </span>
+      </h1>
+      <p class="text-blue-100/80 text-lg md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0 mb-10">
+        Accelerate your research with curated AI prompts, interactive learning modules, and a global community of academics — all in one platform.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+        <a href="#prompt-library" class="bg-white text-primary font-display font-bold px-8 py-3.5 rounded-xl shadow-lg hover:bg-blue-50 transition-colors text-sm">
+          Explore Prompts →
+        </a>
+        <a href="#learning-hub" class="bg-white/10 border border-white/25 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 transition-colors text-sm">
+          Start Learning
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="mt-14 grid grid-cols-3 gap-6 max-w-md mx-auto lg:mx-0">
+        <div class="stat-item text-center lg:text-left">
+          <div class="font-display font-extrabold text-3xl text-white">5k+</div>
+          <div class="text-blue-200/70 text-xs mt-1 font-medium">Prompts shared</div>
+        </div>
+        <div class="stat-item text-center lg:text-left" style="animation-delay:.15s">
+          <div class="font-display font-extrabold text-3xl text-white">12k+</div>
+          <div class="text-blue-200/70 text-xs mt-1 font-medium">Researchers</div>
+        </div>
+        <div class="stat-item text-center lg:text-left" style="animation-delay:.3s">
+          <div class="font-display font-extrabold text-3xl text-white">98%</div>
+          <div class="text-blue-200/70 text-xs mt-1 font-medium">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual cards -->
+    <div class="flex-1 relative hidden lg:flex justify-center items-center min-h-[420px]">
+      <!-- Main card -->
+      <div class="float bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 w-72 shadow-2xl">
+        <div class="flex items-center gap-3 mb-5">
+          <div class="w-9 h-9 rounded-xl bg-primary/90 flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-[18px]" style="font-variation-settings:'FILL' 1">auto_awesome</span>
+          </div>
+          <div>
+            <div class="text-white font-display font-bold text-sm">AI Writing Assistant</div>
+            <div class="text-blue-300/70 text-xs">Generating…</div>
+          </div>
+        </div>
+        <div class="space-y-2 mb-4">
+          <div class="h-2.5 bg-white/20 rounded-full w-full"></div>
+          <div class="h-2.5 bg-white/20 rounded-full w-4/5"></div>
+          <div class="h-2.5 bg-white/20 rounded-full w-3/5"></div>
+        </div>
+        <div class="flex items-center justify-between mt-4">
+          <span class="text-xs text-blue-200/70">Accuracy</span>
+          <span class="text-xs font-bold text-green-300">98%</span>
+        </div>
+        <div class="w-full bg-white/10 rounded-full h-1.5 mt-1.5">
+          <div class="h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-violet-400" style="width:98%"></div>
+        </div>
+      </div>
+
+      <!-- Floating badges -->
+      <div class="float-delay absolute -top-4 -right-4 bg-white rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 text-xs font-semibold text-gray-800 border border-border">
+        <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings:'FILL' 1">verified</span>
+        Citation verified
+      </div>
+      <div class="float absolute -bottom-2 -left-8 bg-violet-600 rounded-xl px-3 py-2 shadow-xl flex items-center gap-2 text-xs font-semibold text-white" style="animation-delay:.8s">
+        <span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1">groups</span>
+        +3 collaborators
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave divider -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 60L1440 60L1440 20C1200 60 960 0 720 20C480 40 240 0 0 20L0 60Z" fill="#f6f7fb"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════ FEATURES STRIP ═══════════════════════ -->
+<section class="bg-white border-y border-border py-12">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="flex flex-col items-center text-center gap-3 reveal">
+        <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">library_books</span>
+        </div>
+        <div class="font-display font-bold text-gray-900 text-sm">5 000+ Prompts</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Curated &amp; peer-reviewed scientific prompts</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:.1s">
+        <div class="w-12 h-12 rounded-2xl bg-violet-50 flex items-center justify-center text-secondary">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">school</span>
+        </div>
+        <div class="font-display font-bold text-gray-900 text-sm">120+ Modules</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Interactive courses &amp; guided tutorials</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:.2s">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">fact_check</span>
+        </div>
+        <div class="font-display font-bold text-gray-900 text-sm">AI Verification</div>
+        <p class="text-xs text-gray-500 leading-relaxed">Built-in hallucination &amp; bias checker</p>
+      </div>
+      <div class="flex flex-col items-center text-center gap-3 reveal" style="transition-delay:.3s">
+        <div class="w-12 h-12 rounded-2xl bg-orange-50 flex items-center justify-center text-orange-500">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">groups</span>
+        </div>
+        <div class="font-display font-bold text-gray-900 text-sm">Global Community</div>
+        <p class="text-xs text-gray-500 leading-relaxed">12 000+ researchers from 80 countries</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PROMPT LIBRARY ═══════════════════════ -->
+<main class="flex-grow flex flex-col gap-24 pb-24">
+
+<section id="prompt-library" class="w-full max-w-[1280px] mx-auto px-6 lg:px-10 pt-20">
+  <div class="text-center mb-12 reveal">
+    <span class="tag bg-blue-100 text-primary mb-4">Prompt Library</span>
+    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Academic &amp; Scientific<br/>Prompt Library</h2>
+    <p class="text-gray-500 text-lg max-w-2xl mx-auto">Discover, share and optimise AI prompts designed for scientific research &amp; academic writing.</p>
+  </div>
+
+  <!-- Search + filter row -->
+  <div class="flex flex-col md:flex-row gap-3 mb-6 reveal">
+    <div class="flex-grow relative">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]">search</span>
+      <input class="w-full pl-12 pr-4 py-3 rounded-xl border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none text-gray-700 bg-white shadow-sm text-sm" placeholder="Search prompts (e.g. 'literature review', 'data analysis')…" type="text"/>
+    </div>
+    <button class="bg-primary text-white px-7 py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors shadow-sm text-sm whitespace-nowrap">Search Prompts</button>
+  </div>
+
+  <!-- Category chips -->
+  <div class="flex flex-wrap gap-2 mb-10 reveal">
+    <button class="px-4 py-2 rounded-xl bg-primary text-white text-sm font-semibold shadow-sm">All Prompts</button>
+    <button class="px-4 py-2 rounded-xl bg-white border border-border text-gray-600 hover:border-primary hover:text-primary text-sm font-medium transition-colors">Literature Review</button>
+    <button class="px-4 py-2 rounded-xl bg-white border border-border text-gray-600 hover:border-primary hover:text-primary text-sm font-medium transition-colors">Data Analysis</button>
+    <button class="px-4 py-2 rounded-xl bg-white border border-border text-gray-600 hover:border-primary hover:text-primary text-sm font-medium transition-colors">Grant Writing</button>
+    <button class="px-4 py-2 rounded-xl bg-white border border-border text-gray-600 hover:border-primary hover:text-primary text-sm font-medium transition-colors">Methodology</button>
+    <button class="px-4 py-2 rounded-xl bg-white border border-border text-gray-600 hover:border-primary hover:text-primary text-sm font-medium transition-colors">Peer Review</button>
+  </div>
+
+  <!-- Cards grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Card 1 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal"
+         data-prompt="Act as an expert academic researcher. Synthesize the key findings, methodologies, and limitations of the provided research papers focusing on overarching themes and identifying gaps in the current literature.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-blue-50 text-primary">Literature Review</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Synthesize Research Findings</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">Act as an expert academic researcher. Synthesize the key findings, methodologies, and limitations of the provided research papers focusing on overarching themes and identifying gaps in the current literature.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 245</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 1.2k</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.1s"
+         data-prompt="I am conducting a study with the following variables: [independent variable types] and [dependent variable types]. The data distribution is [distribution type]. Recommend the most appropriate statistical tests and explain why.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-violet-50 text-secondary">Data Analysis</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Statistical Test Selector</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">I am conducting a study with the following variables: [independent variable types] and [dependent variable types]. The data distribution is [distribution type]. Recommend the most appropriate statistical tests and explain why.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 189</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 856</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.15s"
+         data-prompt="Based on the following project description, draft a 1-page project summary tailored for an NSF grant application. Structure it to clearly highlight Intellectual Merit and Broader Impacts in separate, designated sections.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-emerald-50 text-emerald-600">Grant Writing</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Abstract Generator for NSF</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">Based on the following project description, draft a 1-page project summary tailored for an NSF grant application. Structure it to clearly highlight Intellectual Merit and Broader Impacts in separate, designated sections.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 312</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 2.1k</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.2s"
+         data-prompt="Review the provided manuscript excerpt. Provide constructive, respectful, and actionable feedback focusing on clarity, methodology soundness, and argument structure. Format as a formal peer review report.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-orange-50 text-orange-600">Peer Review</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Constructive Feedback Formatter</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">Review the provided manuscript excerpt. Provide constructive, respectful, and actionable feedback focusing on clarity, methodology soundness, and argument structure. Format as a formal peer review report.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 145</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 678</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.05s"
+         data-prompt="My research question is: [question]. My target population is: [population]. Available resources are: [resources/constraints]. Suggest the most suitable research design, sampling strategy, and data collection methods, with justification.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-blue-50 text-primary">Methodology</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Research Design Consultant</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">My research question is: [question]. My target population is: [population]. Available resources are: [resources/constraints]. Suggest the most suitable research design, sampling strategy, and data collection methods, with justification.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 204</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 1.5k</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.25s"
+         data-prompt="Using the following search results: [number of records identified per database], [exclusion criteria and counts], generate a detailed PRISMA 2020 flow narrative and recommend how to present the selection process visually.">
+      <div class="flex justify-between items-start mb-4">
+        <span class="tag bg-violet-50 text-secondary">Literature Review</span>
+        <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+      </div>
+      <h3 class="font-display text-xl font-bold text-gray-900 mb-2">PRISMA Flow Diagram Writer</h3>
+      <p class="prompt-text text-gray-500 text-sm mb-4 flex-grow leading-relaxed line-clamp-3">Using the following search results: [number of records identified per database], [exclusion criteria and counts], generate a detailed PRISMA 2020 flow narrative and recommend how to present the selection process visually.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">thumb_up</span> 178</span>
+          <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">content_copy</span> 920</span>
+          <button class="copy-btn" onclick="copyPrompt(this)">
+            <span class="material-symbols-outlined text-[15px]">content_copy</span> Copy
+          </button>
+        </div>
+        <button class="text-secondary font-semibold text-sm hover:text-violet-700 flex items-center gap-1 transition-colors">Use Prompt <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="mt-10 text-center reveal">
+    <button class="px-7 py-3 rounded-xl border border-border bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-colors shadow-sm text-sm">Load More Prompts</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════ LEARNING HUB ═══════════════════════ -->
+<section id="learning-hub" class="w-full max-w-[1280px] mx-auto px-6 lg:px-10">
+  <div class="text-center mb-12 reveal">
+    <span class="tag bg-violet-100 text-secondary mb-4">Learning Hub</span>
+    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Resources &amp; Tutorials</h2>
+    <p class="text-gray-500 text-lg max-w-2xl mx-auto">Interactive courses and guides for effective, responsible AI use in academia.</p>
+  </div>
+
+  <!-- Progress overview -->
+  <div class="bg-gradient-to-r from-primary to-secondary rounded-2xl p-8 mb-10 text-white flex flex-col md:flex-row items-center gap-8 reveal shadow-lg">
+    <div class="flex-1">
+      <div class="text-xs font-semibold uppercase tracking-wider text-blue-200 mb-2">Your Progress</div>
+      <h3 class="font-display text-2xl font-bold mb-1">Continue where you left off</h3>
+      <p class="text-blue-100/80 text-sm mb-4">Prompt Engineering Masterclass — Module 3 of 8</p>
+      <div class="w-full bg-white/20 rounded-full h-2 mb-2">
+        <div class="progress-bar" style="width:38%;background:white;opacity:.9;"></div>
+      </div>
+      <span class="text-xs text-blue-200">38% complete</span>
+    </div>
+    <button class="bg-white text-primary font-display font-bold px-7 py-3 rounded-xl hover:bg-blue-50 shadow-md transition-colors text-sm whitespace-nowrap">Continue Learning →</button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Tutorial 1 -->
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift flex flex-col overflow-hidden reveal">
+      <div class="h-3 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <div class="flex justify-between items-start mb-4">
+          <span class="tag bg-blue-50 text-primary">Tutorial</span>
+          <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+        </div>
+        <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Introduction to LLMs for Research</h3>
+        <p class="text-gray-500 text-sm mb-5 flex-grow leading-relaxed">Learn the fundamentals of Large Language Models and how they can accelerate literature review, hypothesis generation, and academic writing workflows.</p>
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+          <div class="flex items-center gap-4 text-sm text-gray-400">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 15 min</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> Beginner</span>
+          </div>
+          <button class="text-primary font-semibold text-sm hover:text-primary-dark flex items-center gap-1 transition-colors">Start Module <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial 2 -->
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift flex flex-col overflow-hidden reveal" style="transition-delay:.1s">
+      <div class="h-3 bg-gradient-to-r from-violet-400 to-violet-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <div class="flex justify-between items-start mb-4">
+          <span class="tag bg-violet-50 text-secondary">Course</span>
+          <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+        </div>
+        <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Prompt Engineering Masterclass</h3>
+        <p class="text-gray-500 text-sm mb-5 flex-grow leading-relaxed">Master the art of crafting precise prompts to extract accurate, highly relevant results from AI models across scientific domains.</p>
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+          <div class="flex items-center gap-4 text-sm text-gray-400">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 45 min</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> Intermediate</span>
+          </div>
+          <button class="text-primary font-semibold text-sm hover:text-primary-dark flex items-center gap-1 transition-colors">Start Module <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial 3 -->
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift flex flex-col overflow-hidden reveal" style="transition-delay:.15s">
+      <div class="h-3 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <div class="flex justify-between items-start mb-4">
+          <span class="tag bg-emerald-50 text-emerald-600">Guide</span>
+          <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+        </div>
+        <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Ethics of AI in Scientific Publishing</h3>
+        <p class="text-gray-500 text-sm mb-5 flex-grow leading-relaxed">A comprehensive guide to ethical boundaries and best practices when utilising AI tools in peer-reviewed, published research.</p>
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+          <div class="flex items-center gap-4 text-sm text-gray-400">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 30 min</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> All levels</span>
+          </div>
+          <button class="text-primary font-semibold text-sm hover:text-primary-dark flex items-center gap-1 transition-colors">Start Module <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tutorial 4 -->
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift flex flex-col overflow-hidden reveal" style="transition-delay:.2s">
+      <div class="h-3 bg-gradient-to-r from-orange-400 to-orange-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <div class="flex justify-between items-start mb-4">
+          <span class="tag bg-orange-50 text-orange-600">Webinar</span>
+          <button class="text-gray-300 hover:text-secondary transition-colors"><span class="material-symbols-outlined">bookmark</span></button>
+        </div>
+        <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Advanced Data Visualisation with AI</h3>
+        <p class="text-gray-500 text-sm mb-5 flex-grow leading-relaxed">Explore how AI tools can assist in generating complex, publication-ready data visualisations from raw datasets with minimal code.</p>
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
+          <div class="flex items-center gap-4 text-sm text-gray-400">
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">schedule</span> 60 min</span>
+            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span> Advanced</span>
+          </div>
+          <button class="text-primary font-semibold text-sm hover:text-primary-dark flex items-center gap-1 transition-colors">Start Module <span class="material-symbols-outlined text-[16px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center reveal">
+    <button class="px-7 py-3 rounded-xl border border-border bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-colors shadow-sm text-sm">View All Resources</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════ AI RESPONSIBILITY ═══════════════════════ -->
+<section id="ai-responsibility" class="w-full max-w-[1280px] mx-auto px-6 lg:px-10">
+  <div class="text-center mb-12 reveal">
+    <span class="tag bg-emerald-100 text-emerald-700 mb-4">AI Responsibility</span>
+    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Verification &amp; Ethical AI</h2>
+    <p class="text-gray-500 text-lg max-w-2xl mx-auto">Tools and metrics to ensure your AI-assisted research stays accurate, ethical, and rigorously validated.</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- Verification Checklist -->
+    <div class="bg-white rounded-2xl border border-border p-8 shadow-sm card-lift flex flex-col reveal">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-primary">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">fact_check</span>
+        </div>
+        <h3 class="font-display text-xl font-bold text-gray-900">Verification Checklist</h3>
+      </div>
+
+      <div class="flex flex-col gap-3" id="checklist">
+        <!-- items injected via JS -->
+      </div>
+
+      <div class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-100 flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary text-[20px]">info</span>
+        <p class="text-xs text-blue-700 leading-relaxed">Complete all steps before submitting AI-assisted content for publication.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-8">
+
+      <!-- Metrics -->
+      <div class="bg-white rounded-2xl border border-border p-8 shadow-sm card-lift reveal" style="transition-delay:.1s">
+        <div class="flex items-center gap-3 mb-6">
+          <div class="w-10 h-10 rounded-xl bg-violet-50 flex items-center justify-center text-secondary">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">analytics</span>
+          </div>
+          <h3 class="font-display text-xl font-bold text-gray-900">Responsibility Metrics</h3>
+        </div>
+        <div class="flex flex-col gap-4">
+          <div>
+            <div class="flex justify-between text-sm font-semibold text-gray-700 mb-1.5"><span>Factual Accuracy</span><span class="text-primary">98%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="progress-bar" style="width:98%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm font-semibold text-gray-700 mb-1.5"><span>Content Originality</span><span class="text-secondary">85%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="progress-bar" style="width:85%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm font-semibold text-gray-700 mb-1.5"><span>Ethical Compliance</span><span class="text-emerald-600">100%</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-emerald-500" style="width:100%"></div></div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm font-semibold text-gray-700 mb-1.5"><span>Bias Score</span><span class="text-orange-500">Low</span></div>
+            <div class="w-full bg-gray-100 rounded-full h-1.5"><div class="h-1.5 rounded-full bg-orange-400" style="width:14%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hallucination example -->
+      <div class="bg-white rounded-2xl border border-border p-8 shadow-sm card-lift flex flex-col reveal" style="transition-delay:.2s">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-500">
+              <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">troubleshoot</span>
+            </div>
+            <h3 class="font-display text-xl font-bold text-gray-900">Spot the Hallucination</h3>
+          </div>
+          <span class="tag bg-gray-100 text-gray-600">Interactive</span>
+        </div>
+        <div class="bg-red-50 rounded-xl p-4 border border-red-200 mb-4 relative">
+          <span class="absolute -top-3 left-4 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">AI Draft</span>
+          <p class="text-sm text-gray-700 leading-relaxed font-mono">
+            "According to Smith et al. (2023), the novel compound exhibited a
+            <span class="bg-red-200 border-b-2 border-red-500 cursor-help rounded px-0.5" title="Hallucination: The paper states 12%, not 45%.">45% increase</span>
+            in cellular regeneration rates, demonstrating unprecedented efficacy in
+            <span class="bg-red-200 border-b-2 border-red-500 cursor-help rounded px-0.5" title="Hallucination: Study used murine models, not human trials.">Phase III human trials</span>."
+          </p>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 border border-blue-200 relative">
+          <span class="absolute -top-3 left-4 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Verified Edit</span>
+          <p class="text-sm text-gray-800 leading-relaxed font-mono">
+            "According to Smith et al. (2023), the novel compound exhibited a
+            <span class="text-primary font-bold">12% increase</span>
+            in cellular regeneration rates, demonstrating significant potential in
+            <span class="text-primary font-bold">pre-clinical murine models</span>."
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ COMMUNITY FORUM ═══════════════════════ -->
+<section id="community-forum" class="w-full max-w-[1280px] mx-auto px-6 lg:px-10">
+  <div class="text-center mb-12 reveal">
+    <span class="tag bg-orange-100 text-orange-600 mb-4">Community Forum</span>
+    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Connect with Researchers</h2>
+    <p class="text-gray-500 text-lg max-w-2xl mx-auto">Ask questions, share prompts, and collaborate with thousands of academics worldwide.</p>
+  </div>
+
+  <div class="flex flex-col lg:flex-row gap-8">
+
+    <!-- Feed -->
+    <div class="flex-grow flex flex-col gap-5">
+
+      <!-- Create post -->
+      <div class="bg-white rounded-2xl border border-border p-5 shadow-sm flex gap-4 reveal">
+        <div class="w-10 h-10 rounded-full bg-gray-100 overflow-hidden flex-shrink-0">
+          <div class="w-full h-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white font-bold text-sm">U</div>
+        </div>
+        <div class="flex-grow flex flex-col gap-3">
+          <input class="w-full bg-gray-50 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all" placeholder="Share a prompt, ask a question, or start a discussion…"/>
+          <div class="flex justify-between items-center">
+            <div class="flex gap-1">
+              <button class="text-gray-400 hover:text-primary p-2 rounded-full hover:bg-blue-50 transition-colors"><span class="material-symbols-outlined text-[18px]">attach_file</span></button>
+              <button class="text-gray-400 hover:text-primary p-2 rounded-full hover:bg-blue-50 transition-colors"><span class="material-symbols-outlined text-[18px]">image</span></button>
+              <button class="text-gray-400 hover:text-primary p-2 rounded-full hover:bg-blue-50 transition-colors"><span class="material-symbols-outlined text-[18px]">code</span></button>
+            </div>
+            <button class="bg-primary text-white px-6 py-2 rounded-xl text-sm font-semibold hover:bg-primary-dark transition-colors shadow-sm">Post</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Post 1 -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col gap-4 reveal">
+        <div class="flex justify-between items-start">
+          <div class="flex gap-3 items-center">
+            <div class="w-10 h-10 rounded-full bg-blue-100 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-primary">SC</div>
+            <div>
+              <div class="font-display font-bold text-gray-900 text-sm">Dr. Sarah Chen</div>
+              <div class="text-xs text-gray-400">Department of Biology · 2h ago</div>
+            </div>
+          </div>
+          <button class="text-gray-300 hover:text-gray-500 transition-colors"><span class="material-symbols-outlined">more_horiz</span></button>
+        </div>
+        <div>
+          <h4 class="font-display font-bold text-gray-900 mb-2">Best practices for generating systematic review protocols?</h4>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">I've been experimenting with Claude to help draft protocols for a systematic review on neuroplasticity. While it excels at outlining PRISMA guidelines, it struggles with highly specific PubMed/Scopus search strings. Has anyone developed a robust prompt sequence for this?</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag bg-blue-50 text-primary">#SystematicReview</span>
+            <span class="tag bg-blue-50 text-primary">#Claude3</span>
+            <span class="tag bg-blue-50 text-primary">#Methodology</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 pt-4 border-t border-gray-100 text-gray-400 text-sm">
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium"><span class="material-symbols-outlined text-[18px]">thumb_up</span> 24</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium"><span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span> 8 Comments</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium ml-auto"><span class="material-symbols-outlined text-[18px]">share</span> Share</button>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col gap-4 reveal" style="transition-delay:.1s">
+        <div class="flex justify-between items-start">
+          <div class="flex gap-3 items-center">
+            <div class="w-10 h-10 rounded-full bg-violet-100 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-secondary">JM</div>
+            <div>
+              <div class="font-display font-bold text-gray-900 text-sm">Prof. James Miller</div>
+              <div class="text-xs text-gray-400">Department of Economics · 5h ago</div>
+            </div>
+          </div>
+          <button class="text-gray-300 hover:text-gray-500 transition-colors"><span class="material-symbols-outlined">more_horiz</span></button>
+        </div>
+        <div>
+          <h4 class="font-display font-bold text-gray-900 mb-2">New prompt template: R Code Debugger for Econometrics</h4>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">I've refined a prompt that works extremely well for debugging complex panel data models in R (using the <code class="bg-gray-100 px-1.5 py-0.5 rounded text-xs">plm</code> package). It doesn't just fix code — it explains the underlying econometric concept being violated.</p>
+          <div class="bg-gray-50 border border-border rounded-xl p-4 mb-4 relative font-mono text-xs text-gray-700 leading-relaxed">
+            <button class="absolute top-2 right-2 text-gray-300 hover:text-secondary transition-colors" title="Copy"><span class="material-symbols-outlined text-[16px]">content_copy</span></button>
+            "Act as an expert econometrician and R programmer. Error: [Paste Error]. Code: [Paste Code]. Data structure: [Describe Data]. Identify the error, provide corrected `plm` code, and explain the econometric intuition behind the failure."
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag bg-violet-50 text-secondary">#DataAnalysis</span>
+            <span class="tag bg-violet-50 text-secondary">#RStats</span>
+            <span class="tag bg-violet-50 text-secondary">#Econometrics</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 pt-4 border-t border-gray-100 text-gray-400 text-sm">
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium text-primary"><span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">thumb_up</span> 156</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium"><span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span> 32 Comments</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium ml-auto"><span class="material-symbols-outlined text-[18px]">share</span> Share</button>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm card-lift flex flex-col gap-4 reveal" style="transition-delay:.15s">
+        <div class="flex justify-between items-start">
+          <div class="flex gap-3 items-center">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 overflow-hidden flex-shrink-0 flex items-center justify-center font-bold text-emerald-700">AK</div>
+            <div>
+              <div class="font-display font-bold text-gray-900 text-sm">Dr. Aisha Kovacs</div>
+              <div class="text-xs text-gray-400">Institute of Public Health · 1d ago</div>
+            </div>
+          </div>
+          <button class="text-gray-300 hover:text-gray-500 transition-colors"><span class="material-symbols-outlined">more_horiz</span></button>
+        </div>
+        <div>
+          <h4 class="font-display font-bold text-gray-900 mb-2">How do you handle AI disclosure in grant applications?</h4>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">Several funding bodies now require disclosure of AI use in submitted applications. I'm looking for community consensus on best wording and which sections typically require explicit disclosure (methodology, budget justification, etc.).</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="tag bg-emerald-50 text-emerald-600">#GrantWriting</span>
+            <span class="tag bg-emerald-50 text-emerald-600">#AIEthics</span>
+            <span class="tag bg-emerald-50 text-emerald-600">#Disclosure</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 pt-4 border-t border-gray-100 text-gray-400 text-sm">
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium"><span class="material-symbols-outlined text-[18px]">thumb_up</span> 67</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium"><span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span> 21 Comments</button>
+          <button class="flex items-center gap-1 hover:text-primary transition-colors font-medium ml-auto"><span class="material-symbols-outlined text-[18px]">share</span> Share</button>
+        </div>
+      </div>
+
+      <button class="w-full py-3 bg-white border border-border text-gray-600 rounded-xl font-semibold hover:bg-gray-50 transition-colors shadow-sm text-sm reveal">Load More Posts</button>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="w-full lg:w-80 flex-shrink-0 flex flex-col gap-5">
+
+      <!-- Categories -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm reveal">
+        <h3 class="font-display font-bold text-gray-900 mb-4">Faculty Categories</h3>
+        <div class="flex flex-col gap-1">
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">science</span><span class="text-sm font-medium">STEM Research</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">1.2k</span>
+          </a>
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">menu_book</span><span class="text-sm font-medium">Humanities</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">854</span>
+          </a>
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">trending_up</span><span class="text-sm font-medium">Economics</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">632</span>
+          </a>
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">school</span><span class="text-sm font-medium">Pedagogy</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">428</span>
+          </a>
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">health_and_safety</span><span class="text-sm font-medium">Medicine</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">391</span>
+          </a>
+          <a class="flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50 text-gray-700 hover:text-primary transition-colors group cursor-pointer" href="#">
+            <div class="flex items-center gap-3"><span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-[18px]">psychology</span><span class="text-sm font-medium">Psychology</span></div>
+            <span class="bg-gray-100 text-gray-500 text-xs px-2 py-0.5 rounded-full group-hover:bg-blue-100 group-hover:text-primary">275</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Trending topics -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm reveal" style="transition-delay:.1s">
+        <h3 class="font-display font-bold text-gray-900 mb-4">Trending Topics</h3>
+        <div class="flex flex-wrap gap-2">
+          <span class="tag bg-blue-50 text-primary cursor-pointer hover:bg-blue-100 transition-colors">#LLMResearch</span>
+          <span class="tag bg-violet-50 text-secondary cursor-pointer hover:bg-violet-100 transition-colors">#PromptEngineering</span>
+          <span class="tag bg-emerald-50 text-emerald-600 cursor-pointer hover:bg-emerald-100 transition-colors">#OpenAccess</span>
+          <span class="tag bg-orange-50 text-orange-600 cursor-pointer hover:bg-orange-100 transition-colors">#GrantWriting</span>
+          <span class="tag bg-blue-50 text-primary cursor-pointer hover:bg-blue-100 transition-colors">#Reproducibility</span>
+          <span class="tag bg-violet-50 text-secondary cursor-pointer hover:bg-violet-100 transition-colors">#AIEthics</span>
+          <span class="tag bg-gray-100 text-gray-600 cursor-pointer hover:bg-gray-200 transition-colors">#DataViz</span>
+        </div>
+      </div>
+
+      <!-- Top contributors -->
+      <div class="bg-white rounded-2xl border border-border p-6 shadow-sm reveal" style="transition-delay:.2s">
+        <h3 class="font-display font-bold text-gray-900 mb-4">Top Contributors</h3>
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white text-xs font-bold flex-shrink-0">SC</div>
+            <div class="flex-grow min-w-0">
+              <div class="font-semibold text-gray-900 text-sm truncate">Dr. Sarah Chen</div>
+              <div class="text-xs text-gray-400">248 contributions</div>
+            </div>
+            <span class="text-xs font-bold text-yellow-500">🏆 #1</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-secondary to-pink-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">JM</div>
+            <div class="flex-grow min-w-0">
+              <div class="font-semibold text-gray-900 text-sm truncate">Prof. James Miller</div>
+              <div class="text-xs text-gray-400">196 contributions</div>
+            </div>
+            <span class="text-xs font-bold text-gray-400">🥈 #2</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">AK</div>
+            <div class="flex-grow min-w-0">
+              <div class="font-semibold text-gray-900 text-sm truncate">Dr. Aisha Kovacs</div>
+              <div class="text-xs text-gray-400">143 contributions</div>
+            </div>
+            <span class="text-xs font-bold text-orange-400">🥉 #3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ BLOG / NEWSROOM ═══════════════════════ -->
+<section id="blog-newsroom" class="w-full max-w-[1280px] mx-auto px-6 lg:px-10">
+  <div class="text-center mb-12 reveal">
+    <span class="tag bg-blue-100 text-primary mb-4">Blog &amp; Newsroom</span>
+    <h2 class="font-display text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">Latest from the Platform</h2>
+    <p class="text-gray-500 text-lg max-w-2xl mx-auto">Insights, updates, and stories from the SaaS for Science community.</p>
+  </div>
+
+  <!-- Featured article -->
+  <div class="bg-gradient-to-r from-[#0a0f2e] to-[#1a0a4e] rounded-2xl p-8 md:p-10 mb-8 flex flex-col md:flex-row items-center gap-8 text-white reveal shadow-xl overflow-hidden relative">
+    <div class="absolute inset-0 grid-lines opacity-30"></div>
+    <div class="relative z-10 flex-1">
+      <span class="tag bg-white/15 text-blue-200 border border-white/20 mb-4">Featured</span>
+      <h3 class="font-display text-2xl md:text-3xl font-extrabold mb-3 leading-snug">How ULIS Researchers Used AI to<br/>Cut Literature Review Time by 70%</h3>
+      <p class="text-blue-100/80 text-sm leading-relaxed mb-6 max-w-lg">A case study from the Faculty of Information Science: using structured prompt chains and verification workflows to produce a 200-source systematic review in under two weeks.</p>
+      <div class="flex items-center gap-4 text-xs text-blue-200/70 mb-6">
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">calendar_today</span> April 18, 2026</span>
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">schedule</span> 8 min read</span>
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> 4.2k views</span>
+      </div>
+      <button class="bg-white text-primary font-display font-bold px-6 py-2.5 rounded-xl hover:bg-blue-50 transition-colors text-sm shadow-md">Read Case Study →</button>
+    </div>
+    <div class="relative z-10 hidden md:flex items-center justify-center w-48 h-48 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-sm flex-shrink-0">
+      <span class="material-symbols-outlined text-white text-[80px]" style="font-variation-settings:'FILL' 1">auto_stories</span>
+    </div>
+  </div>
+
+  <!-- Blog grid -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal">
+      <div class="h-2 bg-gradient-to-r from-primary to-blue-400"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-blue-50 text-primary mb-3">Platform Update</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">Introducing Prompt Version Control</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">Track changes to your saved prompts over time, compare versions, and roll back to earlier iterations — just like Git, but for AI prompts.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Apr 20, 2026 · 4 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal" style="transition-delay:.1s">
+      <div class="h-2 bg-gradient-to-r from-violet-500 to-secondary"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-violet-50 text-secondary mb-3">Research Insight</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">The State of AI in Academic Writing 2026</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">Our annual survey of 3,400 researchers reveals adoption trends, common use cases, and evolving attitudes toward AI-generated content in journals.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Apr 15, 2026 · 12 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal" style="transition-delay:.2s">
+      <div class="h-2 bg-gradient-to-r from-emerald-400 to-emerald-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-emerald-50 text-emerald-600 mb-3">Community</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">10 Most-Used Prompts of Q1 2026</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">We analysed 1.2 million prompt uses across the platform to surface the templates researchers rely on most — from abstract drafting to citation checks.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Apr 10, 2026 · 6 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal" style="transition-delay:.05s">
+      <div class="h-2 bg-gradient-to-r from-orange-400 to-orange-600"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-orange-50 text-orange-600 mb-3">Tutorial</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">Building a Citation Checker with Claude API</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">Step-by-step guide to building an automated citation verification pipeline using the Claude API and CrossRef for hallucination-free reference lists.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Apr 5, 2026 · 9 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal" style="transition-delay:.15s">
+      <div class="h-2 bg-gradient-to-r from-primary to-violet-500"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-blue-50 text-primary mb-3">Interview</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">Professor Nguyen on AI &amp; Peer Review Ethics</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">ULIS's Dean of Research shares her perspective on responsible AI disclosure, journal policy evolution, and what universities should teach students now.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Mar 30, 2026 · 7 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-border shadow-sm card-lift overflow-hidden flex flex-col reveal" style="transition-delay:.25s">
+      <div class="h-2 bg-gradient-to-r from-teal-400 to-emerald-500"></div>
+      <div class="p-6 flex flex-col flex-grow">
+        <span class="tag bg-teal-50 text-teal-600 mb-3">News</span>
+        <h4 class="font-display font-bold text-gray-900 mb-2 leading-snug">ULIS AI Platform Partners with OpenAlex</h4>
+        <p class="text-gray-500 text-sm leading-relaxed flex-grow mb-4">Our new integration with OpenAlex brings live access to 250M+ scholarly works directly into the prompt workflow — enabling real-time citation grounding.</p>
+        <div class="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+          <span>Mar 25, 2026 · 3 min</span>
+          <button class="text-primary font-semibold hover:text-primary-dark transition-colors flex items-center gap-1">Read <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 text-center reveal">
+    <button class="px-7 py-3 rounded-xl border border-border bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-colors shadow-sm text-sm">View All Articles</button>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CTA BANNER ═══════════════════════ -->
+<section class="w-full max-w-[1280px] mx-auto px-6 lg:px-10">
+  <div class="bg-gradient-to-r from-primary to-secondary rounded-3xl p-12 text-center text-white reveal shadow-xl relative overflow-hidden">
+    <div class="grid-lines absolute inset-0 opacity-20"></div>
+    <div class="relative z-10">
+      <h2 class="font-display text-3xl md:text-4xl font-extrabold mb-4">Ready to supercharge your research?</h2>
+      <p class="text-blue-100/80 text-lg mb-8 max-w-xl mx-auto">Join 12,000+ academics already using ULIS AI Platform to write better, faster, and with more confidence.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="bg-white text-primary font-display font-bold px-8 py-3.5 rounded-xl shadow-lg hover:bg-blue-50 transition-colors text-sm">Get Started Free</button>
+        <button class="bg-white/10 border border-white/25 text-white font-semibold px-8 py-3.5 rounded-xl hover:bg-white/20 transition-colors text-sm">View Pricing</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer class="bg-[#0a0f2e] text-white pt-16 pb-8">
+  <div class="max-w-[1280px] mx-auto px-6 lg:px-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
+      <div class="col-span-2 md:col-span-1">
+        <div class="flex items-center gap-2.5 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-white text-[18px]" style="font-variation-settings:'FILL' 1">science</span>
+          </div>
+          <span class="font-display font-bold text-[16px] tracking-tight">AI<span style="color:#60a5fa"> Learning Hub</span></span>
+        </div>
+        <p class="text-blue-300/60 text-sm leading-relaxed mb-5">AI-powered tools built for researchers, academics, and scientists worldwide.</p>
+        <div class="flex gap-3">
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" aria-label="Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-blue-300"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-blue-300"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors" aria-label="GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-blue-300"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-sm mb-4 text-white/90">Platform</h4>
+        <ul class="flex flex-col gap-2.5 text-sm text-blue-300/60">
+          <li><a href="#prompt-library" class="hover:text-white transition-colors">Prompt Library</a></li>
+          <li><a href="#learning-hub"   class="hover:text-white transition-colors">Learning Hub</a></li>
+          <li><a href="#community-forum" class="hover:text-white transition-colors">Community Forum</a></li>
+          <li><a href="#blog-newsroom"  class="hover:text-white transition-colors">Blog &amp; Newsroom</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-sm mb-4 text-white/90">Resources</h4>
+        <ul class="flex flex-col gap-2.5 text-sm text-blue-300/60">
+          <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">API Reference</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Research Papers</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Status Page</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-display font-bold text-sm mb-4 text-white/90">Institution</h4>
+        <ul class="flex flex-col gap-2.5 text-sm text-blue-300/60">
+          <li><a href="#" class="hover:text-white transition-colors">About ULIS</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Terms of Use</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-blue-300/40">
+      <span>© 2026 University of Languages &amp; International Studies – AI Learning Hub. All rights reserved.</span>
+      <span>Built with ❤️ for the research community</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast notification -->
+<div id="toast" role="status" aria-live="polite">
+  <div class="toast-icon">
+    <span class="material-symbols-outlined text-white text-[14px]" style="font-variation-settings:'FILL' 1">check</span>
+  </div>
+  <span id="toast-msg">Prompt copied to clipboard!</span>
+</div>
+
+<!-- Scroll to top -->
+<button id="scrollTopBtn" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <span class="material-symbols-outlined text-[20px]">keyboard_arrow_up</span>
+</button>
+
+<!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+<script>
+  // ── Hamburger toggle ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+
+  // Close mobile menu on link click
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // ── Active nav highlight on scroll ──
+  const sections = ['hero','prompt-library','learning-hub','ai-responsibility','community-forum','blog-newsroom'];
+  const navLinks = document.querySelectorAll('nav a.nav-link');
+
+  function setActive() {
+    let current = '';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('text-primary','bg-blue-50','font-semibold');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('text-primary','bg-blue-50','font-semibold');
+      }
+    });
+  }
+  window.addEventListener('scroll', setActive);
+  setActive();
+
+  // ── Scroll-reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Scroll-top button ──
+  const scrollBtn = document.getElementById('scrollTopBtn');
+  window.addEventListener('scroll', () => scrollBtn.classList.toggle('show', window.scrollY > 400));
+
+  // ── Navbar shadow on scroll ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('shadow-md', window.scrollY > 20);
+    navbar.classList.toggle('shadow-sm', window.scrollY <= 20);
+  });
+
+  // ── Verification checklist ──
+  const checklistData = [
+    { title: '1. Source Tracing', desc: 'Verify all generated citations exist in reputable databases (e.g. PubMed, IEEE Xplore).' },
+    { title: '2. Logical Coherence', desc: 'Review AI-generated arguments for logical fallacies or unsupported leaps in reasoning.' },
+    { title: '3. Cross-Checking', desc: 'Compare statistical claims or factual summaries against primary source data.' },
+    { title: '4. Bias Assessment', desc: 'Evaluate text for algorithmic bias regarding demographics, geography, or methodology.' },
+    { title: '5. Disclosure Compliance', desc: 'Confirm AI use is disclosed per journal or funding body requirements before submission.' },
+  ];
+  const cl = document.getElementById('checklist');
+  checklistData.forEach((item, i) => {
+    cl.innerHTML += `
+      <label class="flex items-start gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-blue-50/50 cursor-pointer transition-colors group select-none">
+        <input type="checkbox" id="chk${i}" class="sr-only peer" onchange="updateProgress()"/>
+        <div class="w-5 h-5 mt-0.5 rounded border-2 border-gray-300 peer-checked:bg-primary peer-checked:border-primary flex-shrink-0 flex items-center justify-center transition-all">
+          <span class="material-symbols-outlined text-white text-[13px] hidden" id="icon${i}">check</span>
+        </div>
+        <div>
+          <h4 class="font-semibold text-gray-900 text-sm mb-0.5 group-hover:text-primary transition-colors">${item.title}</h4>
+          <p class="text-xs text-gray-500 leading-relaxed">${item.desc}</p>
+        </div>
+      </label>`;
+  });
+  // Fix: peer-checked doesn't work easily with sr-only, so handle manually
+  document.querySelectorAll('#checklist input[type=checkbox]').forEach((chk, i) => {
+    chk.addEventListener('change', () => {
+      const box = chk.nextElementSibling;
+      const icon = document.getElementById('icon' + i);
+      if (chk.checked) { box.classList.add('bg-primary','border-primary'); icon.classList.remove('hidden'); }
+      else            { box.classList.remove('bg-primary','border-primary'); icon.classList.add('hidden'); }
+    });
+  });
+
+  // ── Copy prompt to clipboard ──
+  let toastTimer = null;
+
+  function copyPrompt(btn) {
+    const card = btn.closest('[data-prompt]');
+    const text = card ? card.getAttribute('data-prompt') : '';
+    if (!text) return;
+
+    navigator.clipboard.writeText(text).then(() => {
+      // Button state
+      btn.classList.add('copied');
+      const icon = btn.querySelector('.material-symbols-outlined');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<span class="material-symbols-outlined text-[15px]" style="font-variation-settings:\'FILL\' 1">check_circle</span> Copied!';
+      btn.classList.add('copied');
+
+      // Show toast
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-msg');
+      const title = card.querySelector('h3')?.textContent || 'Prompt';
+      msg.textContent = `"${title}" đã được sao chép!`;
+      toast.classList.add('show');
+
+      // Reset after 2.5s
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+        btn.innerHTML = originalHTML;
+        btn.classList.remove('copied');
+      }, 2500);
+    }).catch(() => {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+    });
+  }
+
+  // ── Category filter (Prompt Library) ──
+  document.querySelectorAll('#prompt-library .flex.flex-wrap button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#prompt-library .flex.flex-wrap button').forEach(b => {
+        b.classList.remove('bg-primary','text-white','shadow-sm');
+        b.classList.add('bg-white','text-gray-600');
+      });
+      this.classList.add('bg-primary','text-white','shadow-sm');
+      this.classList.remove('bg-white','text-gray-600');
+    });
+  });
+</script>
+
+</body>
+</html>
